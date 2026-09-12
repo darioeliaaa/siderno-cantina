@@ -1,0 +1,81 @@
+@let p = post();
+
+@if (p) {
+  <article>
+    <header class="section section--tight">
+      <div class="wrap">
+        <p class="eyebrow eyebrow--vino">
+          {{ i18n.pick(p.kicker) }} —
+          <time [attr.datetime]="p.date">{{ i18n.pick(p.dateLabel) }}</time>
+        </p>
+        <h1 class="display" style="margin-top: 20px; max-width: 17ch">{{ i18n.pick(p.title) }}</h1>
+        <p class="lede" style="margin-top: 28px; max-width: 46ch; color: var(--ink-soft)">
+          {{ i18n.pick(p.standfirst) }}
+        </p>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <hr class="rule" />
+    </div>
+
+    <div class="section section--tight">
+      <div class="wrap">
+        <div class="prose" style="font-size: 17.5px">
+          @for (paragraph of i18n.pick(p.body); track paragraph) {
+            <p>{{ paragraph }}</p>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="section--tight">
+      <div class="wrap">
+        <hr class="rule" />
+        <div class="row" style="justify-content: space-between; padding-top: 26px">
+          <a class="btn btn--ghost" [routerLink]="i18n.link('journal')">
+            {{ i18n.t('backToJournal') }}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="wrap">
+        <p class="eyebrow">
+          {{ i18n.locale() === 'it' ? 'Altre note' : 'Other entries' }}
+        </p>
+        <div class="labels" style="margin-top: 18px">
+          @for (other of others(); track other.slug) {
+            <a class="label-row" [routerLink]="i18n.link('post', other.slug)">
+              <span class="num">{{ i18n.pick(other.kicker) }}</span>
+              <span>
+                <time class="mono" style="color: var(--ink-faint)" [attr.datetime]="other.date">
+                  {{ i18n.pick(other.dateLabel) }}
+                </time>
+                <span class="label-row__name" style="display: block; margin-top: 8px">
+                  {{ i18n.pick(other.title) }}
+                </span>
+              </span>
+              <span class="prose" style="font-size: 15.5px">{{ i18n.pick(other.standfirst) }}</span>
+              <span class="label-row__arrow" aria-hidden="true">→</span>
+            </a>
+          }
+        </div>
+      </div>
+    </section>
+  </article>
+} @else {
+  <section class="section">
+    <div class="wrap">
+      <h1 class="display--sm">
+        {{ i18n.locale() === 'it' ? 'Nota non trovata' : 'Entry not found' }}
+      </h1>
+      <p style="margin-top: 20px">
+        <a class="btn btn--solid" [routerLink]="i18n.link('journal')">{{
+          i18n.t('backToJournal')
+        }}</a>
+      </p>
+    </div>
+  </section>
+}

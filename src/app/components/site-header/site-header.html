@@ -1,0 +1,40 @@
+<header class="masthead">
+  <div class="wrap masthead__inner">
+    <a class="wordmark" [routerLink]="i18n.link('home')">
+      S<i>ì</i>dero<small>Cirò · Calabria</small>
+    </a>
+
+    <div class="masthead__tools">
+      <nav class="lang" [attr.aria-label]="i18n.t('language')">
+        <a
+          [routerLink]="i18n.paths().it"
+          [class.on]="i18n.locale() === 'it'"
+          hreflang="it"
+          [attr.aria-current]="i18n.locale() === 'it' ? 'true' : null"
+          >IT</a
+        >
+        <a
+          [routerLink]="i18n.paths().en"
+          [class.on]="i18n.locale() === 'en'"
+          hreflang="en"
+          [attr.aria-current]="i18n.locale() === 'en' ? 'true' : null"
+          >EN</a
+        >
+      </nav>
+
+      <button
+        class="btn"
+        type="button"
+        (click)="indexOpen.set(true)"
+        [attr.aria-expanded]="indexOpen()"
+      >
+        {{ i18n.t('index') }}
+        <span aria-hidden="true">⌗</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+@if (indexOpen()) {
+  <app-site-index (close)="indexOpen.set(false)" />
+}

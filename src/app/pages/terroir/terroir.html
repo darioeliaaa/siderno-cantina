@@ -1,0 +1,71 @@
+@let it = i18n.locale() === 'it';
+
+<section class="section section--tight">
+  <div class="wrap">
+    <p class="eyebrow">§ 04 — {{ it ? 'Il territorio' : 'The terroir' }}</p>
+    <h1 class="display" style="margin-top: 20px; max-width: 14ch">
+      @if (it) {
+        Tre metri di <em>ferro</em> e sabbia.
+      } @else {
+        Three metres of <em>iron</em> and sand.
+      }
+    </h1>
+    <p class="prose" style="margin-top: 28px">
+      {{
+        it
+          ? 'Del terroir si parla sempre al presente e sempre al singolare, come se fosse una cosa sola. Qui sono tre: la sabbia che drena in un’ora, l’argilla ferrosa che trattiene l’acqua fino a luglio, e il mare che alle sei di sera abbassa la temperatura di tredici gradi.'
+          : 'Terroir usually gets talked about as one thing. Here it is three: the sand that drains within the hour, the iron-rich clay that holds water into July, and the sea that drops the temperature by thirteen degrees at six in the evening.'
+      }}
+    </p>
+  </div>
+</section>
+
+<section class="section--tight" appReveal>
+  <div class="wrap">
+    <app-soil-profile />
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 04.1</p>
+      <h2 class="display--sm">{{ it ? 'Quattro letture' : 'Four readings' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{
+          it
+            ? 'Stazione aziendale, medie 2015 — 2025.'
+            : 'Estate weather station, 2015 — 2025 averages.'
+        }}
+      </p>
+    </div>
+
+    <div class="cols cols--2">
+      @for (reading of climate; track reading.value) {
+        <article class="card">
+          <p class="eyebrow">{{ i18n.pick(reading.label) }}</p>
+          <p class="display--sm" style="margin: 10px 0 14px">{{ reading.value }}</p>
+          <p class="prose" style="font-size: 15.5px">{{ i18n.pick(reading.note) }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 04.2</p>
+      <h2 class="display--sm">{{ it ? 'Le sei parcelle' : 'The six parcels' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{
+          it
+            ? 'Ognuna con la sua altitudine, la sua età e i suoi problemi.'
+            : 'Each with its own altitude, age and problems.'
+        }}
+      </p>
+    </div>
+
+    <app-parcel-map />
+  </div>
+</section>

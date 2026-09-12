@@ -1,0 +1,24 @@
+<div class="wrap index-sheet__bar">
+  <p class="eyebrow">{{ i18n.t('index') }} — Sìdero</p>
+  <button class="btn" type="button" (click)="close.emit()" [attr.aria-label]="i18n.t('closeIndex')">
+    {{ i18n.t('closeIndex') }} ✕
+  </button>
+</div>
+
+<div class="wrap" style="padding-block: clamp(24px, 4vw, 56px)">
+  <ul class="index-list">
+    @for (entry of entries; track entry.page; let i = $index) {
+      <li>
+        <a
+          [routerLink]="i18n.link(entry.page)"
+          [class.on]="i18n.page().id === entry.page"
+          (click)="close.emit()"
+        >
+          <span class="num">{{ number(i) }}</span>
+          <span class="index-title">{{ i18n.pick(entry.label) }}</span>
+          <span class="index-note">{{ i18n.pick(entry.note) }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+</div>

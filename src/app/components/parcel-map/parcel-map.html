@@ -1,0 +1,122 @@
+<svg
+  class="atlas__map"
+  viewBox="0 0 720 520"
+  role="img"
+  [attr.aria-label]="
+    i18n.locale() === 'it'
+      ? 'Tavola delle sei parcelle aziendali'
+      : 'Plan of the six estate parcels'
+  "
+>
+  <!-- curve di livello: danno il rilievo senza disegnare una collina -->
+  <g>
+    <path class="contour" d="M-20,120 C120,84 260,150 380,120 S600,60 740,96" />
+    <path class="contour" d="M-20,196 C130,160 250,224 372,196 S610,140 740,172" />
+    <path class="contour" d="M-20,272 C140,240 252,300 366,276 S612,220 740,250" />
+    <path class="contour" d="M-20,350 C150,320 266,376 380,352 S620,300 740,330" />
+    <path class="contour" d="M-20,428 C160,400 280,452 396,428 S628,380 740,408" />
+  </g>
+
+  <!-- la costa ionica, a est -->
+  <path class="sea-line" d="M566,-10 C548,110 596,240 560,360 S596,470 570,530" />
+  <text class="parcel-label" x="640" y="268" transform="rotate(90 640 268)">
+    {{ i18n.locale() === 'it' ? 'Mar Ionio' : 'Ionian Sea' }}
+  </text>
+
+  <!-- le parcelle -->
+  @for (parcel of parcels; track parcel.name) {
+    <path
+      class="parcel"
+      [class.on]="active().name === parcel.name"
+      [attr.d]="parcel.shape"
+      (click)="select(parcel)"
+      (mouseenter)="select(parcel)"
+    />
+    <text class="parcel-label" [attr.x]="parcel.labelAt.x" [attr.y]="parcel.labelAt.y">
+      {{ parcel.name }}
+    </text>
+  }
+
+  <!-- la cantina -->
+  <g>
+    <path d="M286,404 L300,392 L314,404 L314,422 L286,422 Z" fill="var(--ink)" />
+    <text class="parcel-label" x="300" y="442">
+      {{ i18n.locale() === 'it' ? 'Cantina' : 'Cellar' }}
+    </text>
+  </g>
+
+  <!-- nord e scala, come su una tavola vera -->
+  <g transform="translate(660 56)">
+    <path d="M0,22 L0,-12 M-6,-4 L0,-14 L6,-4" stroke="var(--ink-soft)" stroke-width="1.2" fill="none" />
+    <text class="parcel-label" x="0" y="40">N</text>
+  </g>
+  <g transform="translate(48 480)">
+    <path d="M0,0 H104" stroke="var(--ink-soft)" stroke-width="1.2" />
+    <path d="M0,-5 V5 M52,-3 V3 M104,-5 V5" stroke="var(--ink-soft)" stroke-width="1.2" />
+    <text class="soil-depth" x="0" y="22">0</text>
+    <text class="soil-depth" x="92" y="22">500 m</text>
+  </g>
+</svg>
+
+<div class="atlas__panel">
+  <p class="eyebrow">
+    {{ i18n.locale() === 'it' ? 'Parcella' : 'Parcel' }} — {{ active().name }}
+  </p>
+
+  <h3 class="display--sm" style="margin: 10px 0 20px">{{ active().name }}</h3>
+
+  <dl class="spec">
+    <div>
+      <dt>{{ i18n.t('surface') }}</dt>
+      <dd>{{ active().hectares }}</dd>
+    </div>
+    <div>
+      <dt>{{ i18n.t('altitude') }}</dt>
+      <dd>{{ active().altitude }}</dd>
+    </div>
+    <div>
+      <dt>{{ i18n.t('exposure') }}</dt>
+      <dd>{{ i18n.pick(active().exposure) }}</dd>
+    </div>
+    <div>
+      <dt>{{ i18n.t('grape') }}</dt>
+      <dd>{{ i18n.pick(active().grape) }}</dd>
+    </div>
+    <div>
+      <dt>{{ i18n.t('planted') }}</dt>
+      <dd>{{ active().planted }}</dd>
+    </div>
+    <div>
+      <dt>{{ i18n.t('soil') }}</dt>
+      <dd>{{ i18n.pick(active().soil) }}</dd>
+    </div>
+  </dl>
+
+  <p class="prose" style="margin-top: 20px; font-size: 15.5px">{{ i18n.pick(active().note) }}</p>
+
+  <p class="eyebrow" style="margin-top: 24px">
+    {{ i18n.locale() === 'it' ? 'Da qui nasce' : 'Bottled as' }}
+  </p>
+  <div class="row" style="margin-top: 10px">
+    @for (wine of wines(); track wine.slug) {
+      <a class="btn btn--ghost" [routerLink]="i18n.link('wine', wine.slug)">{{ wine.name }}</a>
+    }
+  </div>
+
+  <p class="eyebrow" style="margin-top: 28px">
+    {{ i18n.locale() === 'it' ? 'Cambia parcella' : 'Switch parcel' }}
+  </p>
+  <div class="row" style="margin-top: 10px">
+    @for (parcel of parcels; track parcel.name) {
+      <button
+        type="button"
+        class="btn btn--ghost"
+        [class.btn--solid]="active().name === parcel.name"
+        (click)="select(parcel)"
+        [attr.aria-pressed]="active().name === parcel.name"
+      >
+        {{ parcel.name }}
+      </button>
+    }
+  </div>
+</div>

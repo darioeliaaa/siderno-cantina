@@ -1,0 +1,213 @@
+@let it = i18n.locale() === 'it';
+
+<section class="section section--tight">
+  <div class="wrap">
+    <div class="cols cols--aside" style="align-items: end">
+      <div>
+        <p class="eyebrow">
+          {{ it ? 'Cirò (KR) · Calabria — dal 1968' : 'Cirò (KR) · Calabria — since 1968' }}
+        </p>
+        <h1 class="display" style="margin-top: 22px">
+          @if (it) {
+            Quattro etichette.<br /><em>Sei parcelle.</em><br />Un registro aperto.
+          } @else {
+            Four labels.<br /><em>Six parcels.</em><br />An open ledger.
+          }
+        </h1>
+      </div>
+
+      <div class="stack">
+        <p class="prose">
+          @if (it) {
+            Cirò, costa ionica calabrese. Gaglioppo e Greco Bianco su sabbia e argilla ferrosa, a
+            ottocento metri dal mare. Vendemmia a mano, cemento e botte grande, nessuna
+            aggiunta oltre ai solfiti in imbottigliamento.
+          } @else {
+            Cirò, on the Ionian coast of Calabria. Gaglioppo and Greco Bianco on sand and
+            iron-rich clay, eight hundred metres from the sea. Hand harvest, concrete and large
+            oak, nothing added beyond sulphites at bottling.
+          }
+        </p>
+        <div class="row">
+          <a class="btn btn--solid" [routerLink]="i18n.link('wines')">
+            {{ it ? 'Le etichette' : 'The labels' }}
+          </a>
+          <a class="btn" [routerLink]="i18n.link('visits')">
+            {{ it ? 'Visitare la cantina' : 'Visit the cellar' }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <dl class="datastrip">
+    <div>
+      <dt>{{ it ? 'Ettari vitati' : 'Hectares under vine' }}</dt>
+      <dd>{{ totals.hectares }}</dd>
+    </div>
+    <div>
+      <dt>{{ it ? 'Parcelle' : 'Parcels' }}</dt>
+      <dd>{{ totals.parcels }}</dd>
+    </div>
+    <div>
+      <dt>{{ it ? 'Bottiglie 2025' : '2025 bottles' }}</dt>
+      <dd>{{ totals.bottles }}</dd>
+    </div>
+    <div>
+      <dt>{{ it ? 'Prima annata' : 'First vintage' }}</dt>
+      <dd>{{ totals.firstVintage }}</dd>
+    </div>
+  </dl>
+</div>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 01</p>
+      <h2 class="display--sm">{{ it ? 'Le etichette' : 'The labels' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{
+          it
+            ? 'Quattro vini, uno per ogni cosa che questa terra sa fare.'
+            : 'Four wines, one for each thing this land knows how to do.'
+        }}
+      </p>
+    </div>
+
+    <div class="labels">
+      @for (wine of wines; track wine.slug) {
+        <a
+          class="label-row"
+          [routerLink]="i18n.link('wine', wine.slug)"
+          [style.--vino]="wine.color"
+        >
+          <span class="label-row__swatch"></span>
+          <span>
+            <span class="num">{{ wine.code }}</span>
+            <span class="label-row__name" style="display: block; margin-top: 6px">{{
+              wine.name
+            }}</span>
+            <span class="mono" style="color: var(--ink-faint)">{{
+              i18n.pick(wine.appellation)
+            }}</span>
+          </span>
+          <span class="prose" style="font-size: 15.5px">{{ i18n.pick(wine.tagline) }}</span>
+          <span class="label-row__arrow" aria-hidden="true">→</span>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 02</p>
+      <h2 class="display--sm">{{ it ? 'La tavola' : 'The plan' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{
+          it
+            ? 'Passa sopra una parcella per leggerne la scheda.'
+            : 'Hover a parcel to read its record.'
+        }}
+      </p>
+    </div>
+
+    <app-parcel-map />
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 03</p>
+      <h2 class="display--sm">{{ it ? "L'anno in vigna" : 'The year in the vineyard' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{ it ? 'Dodici mesi, sei fasi, nessuna pausa.' : 'Twelve months, six phases, no pause.' }}
+      </p>
+    </div>
+
+    <app-year-wheel />
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 04</p>
+      <h2 class="display--sm">{{ it ? 'Dal diario' : 'From the journal' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{
+          it
+            ? 'Quello che succede fuori, scritto mentre succede.'
+            : 'What happens outside, written while it happens.'
+        }}
+      </p>
+    </div>
+
+    <div class="cols cols--2">
+      @for (post of latest; track post.slug) {
+        <article class="card">
+          <p class="eyebrow">
+            {{ i18n.pick(post.kicker) }} — <time [attr.datetime]="post.date">{{
+              i18n.pick(post.dateLabel)
+            }}</time>
+          </p>
+          <h3 class="display--sm" style="margin: 14px 0 14px; font-size: clamp(26px, 3vw, 38px)">
+            <a [routerLink]="i18n.link('post', post.slug)" style="text-decoration: none">{{
+              i18n.pick(post.title)
+            }}</a>
+          </h3>
+          <p class="prose" style="font-size: 15.5px">{{ i18n.pick(post.standfirst) }}</p>
+          <p style="margin-top: 18px">
+            <a class="btn btn--ghost" [routerLink]="i18n.link('post', post.slug)">{{
+              i18n.t('readMore')
+            }}</a>
+          </p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <hr class="rule" />
+    <div class="cols cols--2" style="padding-top: clamp(32px, 5vw, 64px)">
+      <div>
+        <h2 class="display--sm">
+          {{ it ? 'Portare Sìdero in carta' : 'Putting Sìdero on your list' }}
+        </h2>
+        <p class="prose" style="margin-top: 18px">
+          {{
+            it
+              ? 'Lavoriamo con ristoranti ed enoteche in tutta Italia e con importatori in sei paesi. Le condizioni, i formati e i tempi stanno tutti nella pagina dedicata.'
+              : 'We work with restaurants and wine shops across Italy and with importers in six countries. Terms, formats and lead times are all on the trade page.'
+          }}
+        </p>
+        <p style="margin-top: 22px">
+          <a class="btn btn--solid" [routerLink]="i18n.link('trade')">
+            {{ it ? 'Distribuzione' : 'Trade & export' }}
+          </a>
+        </p>
+      </div>
+      <div>
+        <h2 class="display--sm">{{ it ? 'Venire a trovarci' : 'Coming to see us' }}</h2>
+        <p class="prose" style="margin-top: 18px">
+          {{
+            it
+              ? 'La cantina è aperta su appuntamento tutto l’anno, tranne a settembre, quando siamo in vigna dall’alba. Tre formule di visita, in italiano e in inglese.'
+              : 'The cellar is open by appointment all year, except in September, when we are in the vineyard from dawn. Three visit formats, in Italian and English.'
+          }}
+        </p>
+        <p style="margin-top: 22px">
+          <a class="btn" [routerLink]="i18n.link('visits')">
+            {{ it ? 'Visite e degustazioni' : 'Visits and tastings' }}
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

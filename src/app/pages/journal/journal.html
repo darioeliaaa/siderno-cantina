@@ -1,0 +1,43 @@
+@let it = i18n.locale() === 'it';
+
+<section class="section section--tight">
+  <div class="wrap">
+    <p class="eyebrow">§ 07 — {{ it ? 'Diario' : 'Journal' }}</p>
+    <h1 class="display" style="margin-top: 20px; max-width: 15ch">
+      @if (it) {
+        Scritto <em>mentre</em> succede.
+      } @else {
+        Written <em>while</em> it happens.
+      }
+    </h1>
+    <p class="prose" style="margin-top: 28px">
+      {{
+        it
+          ? 'Il registro del 1968 era un quaderno a quadretti. Questo è la stessa cosa con un indirizzo web: quanto abbiamo raccolto, cosa è andato storto e cosa abbiamo deciso di conseguenza.'
+          : 'The 1968 ledger was a squared notebook. This is the same thing with a web address: how much we picked, what went wrong, and what we decided as a result.'
+      }}
+    </p>
+  </div>
+</section>
+
+<section class="section--tight">
+  <div class="wrap">
+    <div class="labels">
+      @for (post of posts; track post.slug) {
+        <a class="label-row" [routerLink]="i18n.link('post', post.slug)" appReveal>
+          <span class="num">{{ i18n.pick(post.kicker) }}</span>
+          <span>
+            <time class="mono" style="color: var(--ink-faint)" [attr.datetime]="post.date">
+              {{ i18n.pick(post.dateLabel) }}
+            </time>
+            <span class="label-row__name" style="display: block; margin-top: 8px">
+              {{ i18n.pick(post.title) }}
+            </span>
+          </span>
+          <span class="prose" style="font-size: 15.5px">{{ i18n.pick(post.standfirst) }}</span>
+          <span class="label-row__arrow" aria-hidden="true">→</span>
+        </a>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,96 @@
+@let it = i18n.locale() === 'it';
+
+<section class="section section--tight">
+  <div class="wrap">
+    <p class="eyebrow">§ 03 — {{ it ? 'Le etichette' : 'The labels' }}</p>
+    <h1 class="display" style="margin-top: 20px; max-width: 14ch">
+      @if (it) {
+        Quattro vini,<br /><em>una sola</em> denominazione.
+      } @else {
+        Four wines,<br /><em>one</em> appellation.
+      }
+    </h1>
+    <p class="prose" style="margin-top: 28px">
+      {{
+        it
+          ? 'Tutto quello che imbottigliamo è Cirò DOC. Non facciamo IGT, non facciamo bordolesi, non facciamo bollicine: quattro etichette sono già tante per diciotto ettari, e ognuna deve avere una ragione per esistere.'
+          : 'Everything we bottle is Cirò DOC. No IGT, no Bordeaux varieties, no sparkling: four labels are already a lot for eighteen hectares, and each one has to earn its place.'
+      }}
+    </p>
+  </div>
+</section>
+
+<section class="section--tight">
+  <div class="wrap">
+    <div class="labels">
+      @for (wine of wines; track wine.slug) {
+        <a
+          class="label-row"
+          [routerLink]="i18n.link('wine', wine.slug)"
+          [style.--vino]="wine.color"
+          appReveal
+        >
+          <span class="label-row__swatch"></span>
+          <span>
+            <span class="num">{{ wine.code }} · {{ wine.vintage }}</span>
+            <span class="label-row__name" style="display: block; margin-top: 6px">{{
+              wine.name
+            }}</span>
+            <span class="mono" style="color: var(--ink-faint)">{{
+              i18n.pick(wine.appellation)
+            }}</span>
+          </span>
+          <span class="stack" style="gap: 12px">
+            <span class="prose" style="font-size: 15.5px">{{ i18n.pick(wine.tagline) }}</span>
+            <span class="mono" style="color: var(--ink-faint)">
+              {{ i18n.pick(wine.grape) }} · {{ wine.alcohol }} · {{ wine.bottles }}
+              {{ it ? 'bottiglie' : 'bottles' }}
+            </span>
+          </span>
+          <span class="label-row__arrow" aria-hidden="true">→</span>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 03.1</p>
+      <h2 class="display--sm">{{ it ? 'Le quattro a confronto' : 'The four, side by side' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{
+          it
+            ? 'Stessa scala per tutte: quello che cambia è dove cade.'
+            : 'Same scale for all four: what changes is where it lands.'
+        }}
+      </p>
+    </div>
+
+    <div class="cols cols--2">
+      @for (wine of wines; track wine.slug) {
+        <div class="card" [style.--vino]="wine.color">
+          <p class="eyebrow eyebrow--vino">{{ wine.code }}</p>
+          <h3 class="display--sm" style="margin: 10px 0 18px; font-size: clamp(24px, 3vw, 34px)">
+            {{ wine.name }}
+          </h3>
+          <dl class="spec">
+            @for (trait of wine.profile; track trait.label.it) {
+              <div>
+                <dt>{{ i18n.pick(trait.label) }}</dt>
+                <dd>
+                  <span class="scale" role="img" [attr.aria-label]="trait.value + '/5'">
+                    @for (step of steps; track step) {
+                      <i [class.on]="step <= trait.value"></i>
+                    }
+                  </span>
+                </dd>
+              </div>
+            }
+          </dl>
+        </div>
+      }
+    </div>
+  </div>
+</section>

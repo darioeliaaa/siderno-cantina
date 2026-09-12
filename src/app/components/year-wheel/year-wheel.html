@@ -1,0 +1,54 @@
+<div class="cols cols--aside" style="align-items: center">
+  <svg
+    class="wheel"
+    viewBox="0 0 400 400"
+    role="img"
+    [attr.aria-label]="
+      i18n.locale() === 'it'
+        ? 'Ciclo dell’anno in vigna, fase corrente: ' + i18n.pick(current.name)
+        : 'The year in the vineyard, current phase: ' + i18n.pick(current.name)
+    "
+  >
+    <circle cx="200" cy="200" r="152" fill="none" stroke="var(--line)" stroke-width="1" />
+    <circle cx="200" cy="200" r="110" fill="none" stroke="var(--line)" stroke-width="1" />
+
+    @for (arc of arcs; track arc.phase.name.it) {
+      <path
+        class="wheel-arc"
+        [class.now]="arc.active"
+        [attr.d]="arc.d"
+        [attr.stroke]="arc.active ? 'var(--vino)' : 'var(--line-mid)'"
+      />
+    }
+
+    @for (tick of ticks; track tick.index) {
+      <text class="wheel-month" [attr.x]="tick.at.x" [attr.y]="tick.at.y + 4">
+        {{ monthLetter(tick.index) }}
+      </text>
+    }
+
+    <path
+      [attr.d]="'M200,200 L' + needle.x + ',' + needle.y"
+      stroke="var(--ink)"
+      stroke-width="1.4"
+    />
+    <circle cx="200" cy="200" r="4" fill="var(--ink)" />
+  </svg>
+
+  <div>
+    <p class="eyebrow eyebrow--vino">
+      {{ i18n.locale() === 'it' ? 'In questo momento' : 'Right now' }}
+    </p>
+    <h3 class="display--sm" style="margin: 12px 0 16px">{{ i18n.pick(current.name) }}</h3>
+    <p class="prose">{{ i18n.pick(current.what) }}</p>
+
+    <dl class="spec" style="margin-top: 26px">
+      @for (phase of phases; track phase.name.it) {
+        <div>
+          <dt>{{ i18n.pick(phase.name) }}</dt>
+          <dd class="mono">{{ monthLetter(phase.from) }} — {{ monthLetter(phase.to - 1) }}</dd>
+        </div>
+      }
+    </dl>
+  </div>
+</div>

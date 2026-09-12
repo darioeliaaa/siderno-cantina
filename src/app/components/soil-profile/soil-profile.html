@@ -1,0 +1,84 @@
+<svg
+  class="soil"
+  viewBox="0 0 720 470"
+  role="img"
+  [attr.aria-label]="
+    i18n.locale() === 'it'
+      ? 'Sezione stratigrafica del suolo della parcella Sèrrone'
+      : 'Soil profile of the Sèrrone parcel'
+  "
+>
+  <defs>
+    <pattern id="sand" width="8" height="8" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="0.9" fill="var(--line-strong)" />
+      <circle cx="6" cy="5" r="0.7" fill="var(--line-mid)" />
+    </pattern>
+    <pattern id="clayLight" width="9" height="9" patternUnits="userSpaceOnUse">
+      <path d="M0,9 L9,0" stroke="var(--line-mid)" stroke-width="0.9" />
+    </pattern>
+    <pattern id="clayIron" width="7" height="7" patternUnits="userSpaceOnUse">
+      <path d="M0,7 L7,0 M-1,1 L1,-1 M6,8 L8,6" stroke="var(--vino)" stroke-width="0.9" opacity="0.55" />
+    </pattern>
+    <pattern id="pebbles" width="18" height="14" patternUnits="userSpaceOnUse">
+      <ellipse cx="5" cy="5" rx="3.4" ry="2.3" fill="none" stroke="var(--line-strong)" stroke-width="0.9" />
+      <ellipse cx="13" cy="10" rx="2.8" ry="2" fill="none" stroke="var(--line-mid)" stroke-width="0.9" />
+    </pattern>
+  </defs>
+
+  <!-- gli strati -->
+  @for (layer of layers; track layer.depth) {
+    <rect x="150" [attr.y]="layer.y" width="330" [attr.height]="layer.height" [attr.fill]="layer.fill" />
+    <rect
+      x="150"
+      [attr.y]="layer.y"
+      width="330"
+      [attr.height]="layer.height"
+      fill="none"
+      stroke="var(--line-strong)"
+      stroke-width="1"
+    />
+
+    <!-- quota a sinistra -->
+    <path [attr.d]="'M120,' + layer.y + ' H150'" stroke="var(--line-mid)" stroke-width="1" />
+    <text class="soil-depth" x="116" [attr.y]="layer.y + 4" text-anchor="end">{{ layer.depth }}</text>
+
+    <!-- didascalia a destra -->
+    <path
+      [attr.d]="'M480,' + (layer.y + layer.height / 2) + ' H512'"
+      stroke="var(--line-mid)"
+      stroke-width="1"
+    />
+    <text class="soil-label" x="520" [attr.y]="layer.y + layer.height / 2 - 2">
+      {{ i18n.pick(layer.name) }}
+    </text>
+    <text class="soil-depth" x="520" [attr.y]="layer.y + layer.height / 2 + 14">
+      <tspan>{{ i18n.pick(layer.note) }}</tspan>
+    </text>
+  }
+
+  <!-- il ceppo e le radici -->
+  <g stroke="var(--ink)" fill="none" stroke-linecap="round">
+    <path d="M300,62 L300,26" stroke-width="3.4" />
+    <path d="M300,30 C286,20 276,26 268,18 M300,34 C314,24 326,30 336,20" stroke-width="2" />
+  </g>
+  <g stroke="var(--ink-soft)" fill="none" stroke-linecap="round">
+    <path d="M300,62 C298,110 292,140 286,182 C282,214 288,244 284,282" stroke-width="2" />
+    <path d="M298,96 C276,110 258,118 240,140" stroke-width="1.3" />
+    <path d="M296,128 C320,140 342,146 358,168" stroke-width="1.3" />
+    <path d="M288,176 C266,196 252,206 238,236" stroke-width="1.2" />
+    <path d="M287,206 C312,222 330,236 342,262" stroke-width="1.1" />
+    <path d="M284,258 C272,278 268,290 266,308" stroke-width="1" />
+    <path d="M284,282 C296,300 300,310 302,318" stroke-width="0.9" />
+  </g>
+
+  <text class="soil-label" x="150" y="40">
+    {{ i18n.locale() === 'it' ? 'Sèrrone — sezione' : 'Sèrrone — section' }}
+  </text>
+  <text class="soil-depth" x="150" y="452">
+    {{
+      i18n.locale() === 'it'
+        ? 'Rilievo del 12 marzo 2024, fossa aperta a 3 m'
+        : 'Survey of 12 March 2024, pit dug to 3 m'
+    }}
+  </text>
+</svg>

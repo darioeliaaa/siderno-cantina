@@ -1,0 +1,58 @@
+<div class="wrap foot-grid">
+  <section>
+    <p class="eyebrow">{{ i18n.t('newsletterTitle') }}</p>
+    <p style="margin: 14px 0 22px; max-width: 42ch; font-size: 15px; line-height: 1.65">
+      {{ i18n.t('newsletterText') }}
+    </p>
+    <app-newsletter-form />
+  </section>
+
+  <section>
+    <p class="eyebrow">{{ i18n.t('index') }}</p>
+    <nav class="foot-list">
+      @for (entry of nav; track entry.page) {
+        <a [routerLink]="i18n.link(entry.page)">{{ i18n.pick(entry.label) }}</a>
+      }
+    </nav>
+  </section>
+
+  <section>
+    <p class="eyebrow">{{ i18n.t('allWines') }}</p>
+    <nav class="foot-list">
+      @for (wine of wines; track wine.slug) {
+        <a [routerLink]="i18n.link('wine', wine.slug)">{{ wine.name }}</a>
+      }
+    </nav>
+  </section>
+
+  <section>
+    <p class="eyebrow">{{ estate.name }}</p>
+    <div class="foot-list">
+      <span>{{ estate.legalName }}</span>
+      <span>
+        {{ estate.street }} — {{ estate.postalCode }} {{ estate.city }} ({{ estate.province }}),
+        {{ i18n.pick(estate.country) }}
+      </span>
+      <a [href]="phoneHref">{{ estate.phone }}</a>
+      <a [href]="'mailto:' + estate.email">{{ estate.email }}</a>
+    </div>
+
+    <div class="foot-list" style="margin-top: 20px">
+      @for (row of opening; track row.days.it) {
+        <span>
+          <span class="mono" style="color: rgba(233, 228, 216, 0.5)">{{ i18n.pick(row.days) }}</span>
+          — {{ i18n.pick(row.hours) }}
+        </span>
+      }
+    </div>
+  </section>
+</div>
+
+<div class="wrap foot-bottom">
+  <span>© {{ year }} {{ estate.legalName }} — P.IVA {{ estate.vat }}</span>
+  <span>{{ i18n.t('demoNotice') }}</span>
+  <span>
+    {{ i18n.t('builtBy') }}
+    <a href="https://www.darioelia.it" target="_blank" rel="noopener">Dario Elia</a>
+  </span>
+</div>

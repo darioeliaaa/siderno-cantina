@@ -1,0 +1,177 @@
+@let it = i18n.locale() === 'it';
+
+<section class="section section--tight">
+  <div class="wrap">
+    <p class="eyebrow">§ 08 — {{ it ? 'Contatti' : 'Contact' }}</p>
+    <h1 class="display" style="margin-top: 20px; max-width: 14ch">
+      @if (it) {
+        Quattro chilometri <em>dal bivio</em>.
+      } @else {
+        Four kilometres <em>from the turning</em>.
+      }
+    </h1>
+  </div>
+</section>
+
+<section class="section--tight">
+  <div class="wrap">
+    <div class="cols cols--aside">
+      <svg
+        class="atlas__map"
+        viewBox="0 0 720 400"
+        role="img"
+        [attr.aria-label]="
+          it
+            ? 'Schema stradale: dalla SS106 al bivio Sèrrone, poi quattro chilometri fino alla cantina'
+            : 'Road diagram: from the SS106 to the Sèrrone turning, then four kilometres to the cellar'
+        "
+      >
+        <!-- mare e costa -->
+        <path class="sea-line" d="M672,-10 C656,90 692,200 664,300 S690,380 670,410" />
+        <text class="parcel-label" x="700" y="200" transform="rotate(90 700 200)">
+          {{ it ? 'Mar Ionio' : 'Ionian Sea' }}
+        </text>
+
+        <!-- statale 106 -->
+        <path d="M596,-10 C588,100 604,210 592,310 S598,380 590,410" stroke="var(--ink)" stroke-width="3" fill="none" />
+        <text class="soil-label" x="606" y="72">SS 106</text>
+
+        <!-- provinciale verso la cantina -->
+        <path
+          d="M592,196 C500,186 452,214 396,196 C330,174 288,156 214,150"
+          stroke="var(--ink-soft)"
+          stroke-width="2"
+          fill="none"
+          stroke-dasharray="0"
+        />
+        <text class="soil-depth" x="330" y="205">{{ it ? '4,2 km' : '4.2 km' }}</text>
+
+        <!-- bivio -->
+        <circle cx="592" cy="196" r="6" fill="none" stroke="var(--vino)" stroke-width="2" />
+        <text class="soil-label" x="520" y="176">{{ it ? 'Bivio Sèrrone' : 'Sèrrone turning' }}</text>
+
+        <!-- paesi -->
+        <circle cx="596" cy="330" r="4" fill="var(--ink-faint)" />
+        <text class="soil-depth" x="610" y="334">Cirò Marina</text>
+        <circle cx="300" cy="70" r="4" fill="var(--ink-faint)" />
+        <text class="soil-depth" x="312" y="74">Cirò</text>
+
+        <!-- cantina -->
+        <path d="M196,138 L214,122 L232,138 L232,162 L196,162 Z" fill="var(--ink)" />
+        <text class="soil-label" x="214" y="186" text-anchor="middle">Sìdero</text>
+
+        <!-- nord -->
+        <g transform="translate(56 60)">
+          <path d="M0,22 L0,-12 M-6,-4 L0,-14 L6,-4" stroke="var(--ink-soft)" stroke-width="1.2" fill="none" />
+          <text class="parcel-label" x="0" y="40">N</text>
+        </g>
+      </svg>
+
+      <div class="stack">
+        <div>
+          <p class="eyebrow">{{ it ? 'Indirizzo' : 'Address' }}</p>
+          <p style="margin-top: 12px; font-size: 16.5px; line-height: 1.7">
+            {{ estate.legalName }}<br />
+            {{ estate.street }}<br />
+            {{ estate.postalCode }} {{ estate.city }} ({{ estate.province }}) —
+            {{ i18n.pick(estate.country) }}
+          </p>
+        </div>
+
+        <div>
+          <p class="eyebrow">{{ it ? 'Diretti' : 'Direct' }}</p>
+          <p style="margin-top: 12px; font-size: 16.5px; line-height: 1.9">
+            <a [href]="phoneHref">{{ estate.phone }}</a><br />
+            <a [href]="'mailto:' + estate.email">{{ estate.email }}</a><br />
+            <a [href]="'mailto:' + estate.tradeEmail">{{ estate.tradeEmail }}</a>
+          </p>
+        </div>
+
+        <div>
+          <p class="eyebrow">{{ it ? 'Come arrivare' : 'Getting here' }}</p>
+          <p class="prose" style="margin-top: 12px; font-size: 15.5px">
+            {{
+              it
+                ? 'Dalla SS106 uscita Cirò, poi bivio Sèrrone: da lì quattro chilometri di provinciale, l’ultimo tratto è sterrato ma tenuto bene. Il cancello è verde e non c’è insegna: è la seconda cosa che tutti ci dicono al telefono.'
+                : 'From the SS106 take the Cirò exit, then the Sèrrone turning: four kilometres of country road, the last stretch unpaved but well kept. The gate is green and there is no sign — the second thing everyone mentions when they call.'
+            }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section--tight" appReveal>
+  <div class="wrap">
+    <dl class="spec">
+      @for (row of opening; track row.days.it) {
+        <div>
+          <dt>{{ i18n.pick(row.days) }}</dt>
+          <dd>{{ i18n.pick(row.hours) }}</dd>
+        </div>
+      }
+    </dl>
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 08.1</p>
+      <h2 class="display--sm">{{ it ? 'Scrivici' : 'Write to us' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{ it ? 'Rispondiamo entro due giorni.' : 'We reply within two days.' }}
+      </p>
+    </div>
+
+    @if (sent()) {
+      <p class="notice">
+        {{ it ? 'Messaggio registrato. A presto.' : 'Message logged. Talk soon.' }}
+      </p>
+    } @else {
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="form-grid">
+        <div class="field">
+          <label for="c-name">{{ it ? 'Nome' : 'Name' }}</label>
+          <input id="c-name" formControlName="name" autocomplete="name" />
+          @if (form.controls.name.touched && form.controls.name.invalid) {
+            <span class="err">{{ i18n.t('required') }}</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="c-email">Email</label>
+          <input id="c-email" type="email" formControlName="email" autocomplete="email" />
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <span class="err">{{ i18n.t('invalidEmail') }}</span>
+          }
+        </div>
+
+        <div class="field field--full">
+          <label for="c-subject">{{ it ? 'Oggetto' : 'Subject' }}</label>
+          <select id="c-subject" formControlName="subject">
+            <option value="">—</option>
+            @for (subject of subjects[i18n.locale()]; track subject) {
+              <option [value]="subject">{{ subject }}</option>
+            }
+          </select>
+          @if (form.controls.subject.touched && form.controls.subject.invalid) {
+            <span class="err">{{ i18n.t('required') }}</span>
+          }
+        </div>
+
+        <div class="field field--full">
+          <label for="c-message">{{ it ? 'Messaggio' : 'Message' }}</label>
+          <textarea id="c-message" rows="5" formControlName="message"></textarea>
+          @if (form.controls.message.touched && form.controls.message.invalid) {
+            <span class="err">{{ i18n.t('required') }}</span>
+          }
+        </div>
+
+        <div class="field--full">
+          <button class="btn btn--solid" type="submit">{{ it ? 'Invia' : 'Send' }}</button>
+        </div>
+      </form>
+    }
+  </div>
+</section>

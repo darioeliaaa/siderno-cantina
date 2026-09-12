@@ -1,0 +1,213 @@
+@let it = i18n.locale() === 'it';
+
+<section class="section section--tight">
+  <div class="wrap">
+    <p class="eyebrow">§ 06 — {{ it ? 'Distribuzione' : 'Export' }}</p>
+
+    @if (it) {
+      <h1 class="display" style="margin-top: 20px; max-width: 15ch">
+        Per chi il vino lo <em>versa</em> agli altri.
+      </h1>
+      <p class="prose" style="margin-top: 28px">
+        Lavoriamo con ristoranti, enoteche e wine bar in dieci regioni. Non passiamo dalla grande
+        distribuzione e non facciamo private label: chi mette Sìdero in carta lo fa perché ha
+        assaggiato, non perché gli conviene a scaffale.
+      </p>
+    } @else {
+      <h1 class="display" style="margin-top: 20px; max-width: 15ch">
+        Cirò DOC, <em>a pallet</em> at a time.
+      </h1>
+      <p class="prose" style="margin-top: 28px">
+        A third of what we make leaves Italy. We are already in six markets and looking for
+        partners in four more — not for volume, which we do not have, but for people willing to
+        explain a pale red from a region nobody expects. Terms below are the ones we actually
+        work on.
+      </p>
+    }
+  </div>
+</section>
+
+<section class="section--tight" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 06.1</p>
+      <h2 class="display--sm">{{ it ? 'Condizioni' : 'Terms' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{ it ? 'Valide dal listino 2026.' : 'As per the 2026 price list.' }}
+      </p>
+    </div>
+
+    <dl class="spec">
+      @for (term of it ? termsIt : termsEn; track term.label) {
+        <div>
+          <dt>{{ term.label }}</dt>
+          <dd>{{ term.value }}</dd>
+        </div>
+      }
+    </dl>
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 06.2</p>
+      <h2 class="display--sm">{{ it ? 'Dove siamo già' : 'Where we already are' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{
+          it
+            ? 'Chiedi il contatto dell’agente della tua zona.'
+            : 'Markets marked “open” have no importer yet.'
+        }}
+      </p>
+    </div>
+
+    <div class="cols cols--2">
+      <ul class="foot-list" style="color: var(--ink-soft)">
+        @for (market of (it ? marketsIt : marketsEn).slice(0, 5); track market) {
+          <li>— {{ market }}</li>
+        }
+      </ul>
+      <ul class="foot-list" style="color: var(--ink-soft)">
+        @for (market of (it ? marketsIt : marketsEn).slice(5); track market) {
+          <li>— {{ market }}</li>
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 06.3</p>
+      <h2 class="display--sm">{{ it ? 'Richiedi il listino' : 'Request the trade pack' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{
+          it
+            ? 'Listino riservato, schede e disponibilità per annata.'
+            : 'Price list, tech sheets, availability by vintage.'
+        }}
+      </p>
+    </div>
+
+    @if (sent()) {
+      <div class="stack">
+        <p class="notice">
+          {{
+            it
+              ? 'Richiesta presa in carico: ti risponde l’agente della tua zona.'
+              : 'Request received — our export manager will follow up.'
+          }}
+        </p>
+
+        <div>
+          <p class="eyebrow">
+            {{ it ? 'Cosa arriva al CRM' : 'What reaches the CRM' }}
+          </p>
+          <p class="prose" style="margin: 12px 0 16px; font-size: 15px">
+            {{
+              it
+                ? 'In un sito consegnato questo oggetto parte verso Airtable o HubSpot via webhook, già assegnato a chi deve richiamare. Qui lo mostriamo e basta.'
+                : 'On a live site this object is posted to Airtable or HubSpot through a webhook, already assigned to whoever should follow up. Here we simply show it.'
+            }}
+          </p>
+          <pre
+            class="mono"
+            style="
+              overflow-x: auto;
+              border: 1px solid var(--line-strong);
+              padding: 18px;
+              font-size: 12.5px;
+              line-height: 1.7;
+              margin: 0;
+            "
+            >{{ payload() }}</pre
+          >
+        </div>
+      </div>
+    } @else {
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="form-grid">
+        <div class="field">
+          <label for="t-company">{{ it ? 'Attività' : 'Company' }}</label>
+          <input id="t-company" formControlName="company" autocomplete="organization" />
+          @if (form.controls.company.touched && form.controls.company.invalid) {
+            <span class="err">{{ i18n.t('required') }}</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="t-contact">{{ it ? 'Referente' : 'Contact person' }}</label>
+          <input id="t-contact" formControlName="contact" autocomplete="name" />
+          @if (form.controls.contact.touched && form.controls.contact.invalid) {
+            <span class="err">{{ i18n.t('required') }}</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="t-email">Email</label>
+          <input id="t-email" type="email" formControlName="email" autocomplete="email" />
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <span class="err">{{ i18n.t('invalidEmail') }}</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="t-channel">{{ it ? 'Tipo di attività' : 'Type of business' }}</label>
+          <select id="t-channel" formControlName="channel">
+            <option value="">—</option>
+            @for (channel of it ? channelsIt : channelsEn; track channel) {
+              <option [value]="channel">{{ channel }}</option>
+            }
+          </select>
+          @if (form.controls.channel.touched && form.controls.channel.invalid) {
+            <span class="err">{{ i18n.t('required') }}</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="t-market">{{ it ? 'Regione' : 'Market' }}</label>
+          <select id="t-market" formControlName="market">
+            <option value="">—</option>
+            @for (market of it ? marketsIt : marketsEn; track market) {
+              <option [value]="market">{{ market }}</option>
+            }
+          </select>
+          @if (form.controls.market.touched && form.controls.market.invalid) {
+            <span class="err">{{ i18n.t('required') }}</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="t-volume">
+            {{ it ? 'Bottiglie/anno indicative' : 'Indicative bottles per year' }}
+          </label>
+          <input id="t-volume" formControlName="volume" [placeholder]="it ? '300' : '1200'" />
+        </div>
+
+        <div class="field field--full">
+          <label for="t-message">{{ it ? 'Messaggio' : 'Message' }}</label>
+          <textarea
+            id="t-message"
+            rows="4"
+            formControlName="message"
+            [placeholder]="
+              it
+                ? 'Raccontaci due righe sulla tua carta dei vini.'
+                : 'Tell us briefly about your portfolio.'
+            "
+          ></textarea>
+        </div>
+
+        <div class="field--full row">
+          <button class="btn btn--solid" type="submit">
+            {{ it ? 'Invia richiesta' : 'Send request' }}
+          </button>
+          <a class="btn btn--ghost" [href]="'mailto:' + (it ? estate.email : estate.tradeEmail)">
+            {{ it ? estate.email : estate.tradeEmail }}
+          </a>
+        </div>
+      </form>
+    }
+  </div>
+</section>

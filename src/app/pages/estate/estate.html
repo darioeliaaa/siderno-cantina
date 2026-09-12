@@ -1,0 +1,116 @@
+@let it = i18n.locale() === 'it';
+
+<section class="section section--tight">
+  <div class="wrap">
+    <p class="eyebrow">§ 02 — {{ it ? 'La cantina' : 'The estate' }}</p>
+    <h1 class="display" style="margin-top: 20px; max-width: 15ch">
+      @if (it) {
+        Una famiglia, <em>un quaderno</em>, diciotto ettari.
+      } @else {
+        One family, <em>one notebook</em>, eighteen hectares.
+      }
+    </h1>
+    <p class="prose" style="margin-top: 28px">
+      {{
+        it
+          ? 'Sìdero è il nome greco del ferro, ed è quello che si sente nell’argilla del Sèrrone quando la spezzi in mano. La cantina sta lì dal 1968, e da allora ogni vendemmia è annotata su un registro — il nostro modo di non raccontarci storie a fine anno.'
+          : 'Sìdero is the Greek word for iron, and iron is what you smell in the Sèrrone clay when you break a clod in your hand. The estate has been there since 1968, and every harvest since has been written into a ledger — our way of not telling ourselves stories at the end of the year.'
+      }}
+    </p>
+  </div>
+</section>
+
+<section class="section--tight">
+  <div class="wrap">
+    <dl class="datastrip">
+      <div>
+        <dt>{{ it ? 'Ettari vitati' : 'Hectares under vine' }}</dt>
+        <dd>{{ totals.hectares }}</dd>
+      </div>
+      <div>
+        <dt>{{ it ? 'Parcelle' : 'Parcels' }}</dt>
+        <dd>{{ totals.parcels }}</dd>
+      </div>
+      <div>
+        <dt>{{ it ? 'Bottiglie 2025' : '2025 bottles' }}</dt>
+        <dd>{{ totals.bottles }}</dd>
+      </div>
+      <div>
+        <dt>{{ it ? 'Persone' : 'People' }}</dt>
+        <dd>7</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 02.1</p>
+      <h2 class="display--sm">{{ it ? 'Tre date' : 'Three dates' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{ it ? 'Cinquantotto anni in tre righe.' : 'Fifty-eight years in three lines.' }}
+      </p>
+    </div>
+
+    <dl class="spec">
+      @for (chapter of chapters; track chapter.year) {
+        <div style="grid-template-columns: minmax(0, 7rem) minmax(0, 1fr)">
+          <dt style="font-size: 15px; letter-spacing: 0.1em">{{ chapter.year }}</dt>
+          <dd>
+            <h3 class="display--sm" style="font-size: clamp(22px, 2.6vw, 30px)">
+              {{ i18n.pick(chapter.title) }}
+            </h3>
+            <p class="prose" style="margin-top: 12px; font-size: 15.5px">
+              {{ i18n.pick(chapter.text) }}
+            </p>
+          </dd>
+        </div>
+      }
+    </dl>
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 02.2</p>
+      <h2 class="display--sm">{{ it ? 'Come lavoriamo' : 'How we work' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{ it ? 'Tre regole, e nessuna è estetica.' : 'Three rules, none of them cosmetic.' }}
+      </p>
+    </div>
+
+    <div class="cols cols--3">
+      @for (rule of principles; track rule.year) {
+        <article class="card">
+          <p class="num">{{ rule.year }}</p>
+          <h3 class="display--sm" style="margin: 12px 0 14px; font-size: clamp(22px, 2.6vw, 30px)">
+            {{ i18n.pick(rule.title) }}
+          </h3>
+          <p class="prose" style="font-size: 15.5px">{{ i18n.pick(rule.text) }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 02.3</p>
+      <h2 class="display--sm">{{ it ? "L'anno in vigna" : 'The year in the vineyard' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{ it ? 'Dove siamo adesso, nel ciclo.' : 'Where we are in the cycle, right now.' }}
+      </p>
+    </div>
+
+    <app-year-wheel />
+
+    <p style="margin-top: 36px">
+      <a class="btn btn--solid" [routerLink]="i18n.link('terroir')">
+        {{ it ? 'Il territorio, sottoterra' : 'The terroir, underground' }}
+      </a>
+    </p>
+  </div>
+</section>

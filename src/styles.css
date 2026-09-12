@@ -1,0 +1,1158 @@
+/* =========================================================================
+   SÌDERO — sistema di design
+   L'idea: non una brochure di vino, un archivio. Carta di calce, inchiostro
+   ferroso, righe sottili ovunque come su una tavola catastale. L'unico
+   colore forte è il vino stesso: --vino cambia pagina per pagina e con lui
+   cambia il carattere del sito.
+   ========================================================================= */
+
+:root {
+  --calce: #e9e4d8;
+  --calce-alta: #f3efe6;
+  --calce-bassa: #ded8c9;
+
+  --ink: #15110f;
+  --ink-soft: #4b433c;
+  --ink-faint: #8c8377;
+
+  --line: rgba(21, 17, 15, 0.14);
+  --line-mid: rgba(21, 17, 15, 0.26);
+  --line-strong: rgba(21, 17, 15, 0.55);
+
+  --ferro: #8a3520;
+
+  /* Il colore del vino della pagina. Di default è il ferro della casa. */
+  --vino: var(--ferro);
+  --on-vino: #f0ebe0;
+
+  --display: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+  --sans: 'Archivo', system-ui, -apple-system, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --gutter: clamp(20px, 4vw, 56px);
+  --measure: 62ch;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--calce);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.62;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+}
+
+p {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+::selection {
+  background: var(--vino);
+  color: var(--on-vino);
+}
+
+:focus-visible {
+  outline: 2px solid var(--vino);
+  outline-offset: 3px;
+}
+
+/* --- reticolo di fondo ---------------------------------------------------
+   Cinque righe verticali fisse, come la squadratura di una tavola tecnica.
+   Sono l'unica "texture" del sito: niente foto, niente rumore. */
+.ruling {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.ruling span {
+  border-left: 1px solid var(--line);
+}
+
+.ruling span:first-child {
+  border-left: none;
+}
+
+@media (max-width: 780px) {
+  .ruling {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --- impalcatura --------------------------------------------------------- */
+.shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+main {
+  flex: 1;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--calce);
+  padding: 12px 18px;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.skip-link:focus {
+  left: 12px;
+  top: 12px;
+}
+
+/* --- tipografia ---------------------------------------------------------- */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0;
+}
+
+.eyebrow--vino {
+  color: var(--vino);
+}
+
+.display {
+  font-family: var(--display);
+  font-size: clamp(44px, 9vw, 132px);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+}
+
+.display--sm {
+  font-family: var(--display);
+  font-size: clamp(32px, 5.4vw, 68px);
+  line-height: 0.98;
+  letter-spacing: -0.018em;
+}
+
+.display em,
+.display--sm em {
+  font-style: italic;
+  color: var(--vino);
+}
+
+.lede {
+  font-family: var(--display);
+  font-size: clamp(21px, 2.5vw, 30px);
+  line-height: 1.3;
+  max-width: 24ch;
+  letter-spacing: -0.01em;
+}
+
+.prose {
+  max-width: var(--measure);
+  font-size: 16.5px;
+  line-height: 1.72;
+  color: var(--ink-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 1.15em;
+}
+
+.prose strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.mono {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.num {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  color: var(--ink-faint);
+}
+
+/* --- righe e blocchi ----------------------------------------------------- */
+.rule {
+  height: 1px;
+  background: var(--line-mid);
+  border: none;
+  margin: 0;
+}
+
+.section {
+  padding-block: clamp(44px, 5.5vw, 78px);
+  position: relative;
+}
+
+.section--tight {
+  padding-block: clamp(26px, 3.4vw, 46px);
+}
+
+.section__head {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  padding-bottom: 18px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+@media (min-width: 900px) {
+  .section__head {
+    grid-template-columns: 4rem minmax(0, 1fr) minmax(0, 30ch);
+    gap: 28px;
+    align-items: baseline;
+  }
+}
+
+/* --- banda scura ---------------------------------------------------------
+   Una pagina tutta di calce si legge bene e stanca presto. Questa banda
+   ribalta i token invece di riscrivere gli stili dei componenti che
+   contiene: ciò che sta dentro si adatta da solo. */
+.band--dark {
+  background: #15110f;
+  color: #e9e4d8;
+
+  --ink: #e9e4d8;
+  --ink-soft: rgba(233, 228, 216, 0.76);
+  --ink-faint: rgba(233, 228, 216, 0.5);
+  --line: rgba(233, 228, 216, 0.14);
+  --line-mid: rgba(233, 228, 216, 0.26);
+  --line-strong: rgba(233, 228, 216, 0.48);
+  --calce-alta: rgba(233, 228, 216, 0.04);
+  --vino: #cf7a63;
+}
+
+.band--dark .btn--solid {
+  background: var(--calce);
+  border-color: var(--calce);
+  color: #15110f;
+}
+
+/* --- masthead ------------------------------------------------------------ */
+.masthead {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--calce) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line-mid);
+}
+
+.masthead__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 62px;
+  padding-block: 10px;
+}
+
+.wordmark {
+  font-family: var(--display);
+  font-size: 26px;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  line-height: 1;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.06em;
+  white-space: nowrap;
+}
+
+.wordmark i {
+  font-style: normal;
+  color: var(--vino);
+}
+
+.wordmark small {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-left: 10px;
+}
+
+@media (max-width: 640px) {
+  .wordmark small {
+    display: none;
+  }
+}
+
+.masthead__tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --- controlli ----------------------------------------------------------- */
+.btn {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  padding: 9px 16px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.btn:hover {
+  background: var(--vino);
+  border-color: var(--vino);
+  color: var(--on-vino);
+}
+
+.btn--solid {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--calce);
+}
+
+.btn--solid:hover {
+  background: var(--vino);
+  border-color: var(--vino);
+  color: var(--on-vino);
+}
+
+.btn--ghost {
+  border-color: var(--line-mid);
+  color: var(--ink-soft);
+}
+
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.lang {
+  display: inline-flex;
+  border: 1px solid var(--line-strong);
+}
+
+.lang a {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 8px 11px;
+  text-decoration: none;
+  color: var(--ink-faint);
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.lang a + a {
+  border-left: 1px solid var(--line-strong);
+}
+
+.lang a.on {
+  background: var(--ink);
+  color: var(--calce);
+}
+
+.lang a:not(.on):hover {
+  background: var(--vino);
+  color: var(--on-vino);
+}
+
+/* --- indice a tutta pagina ----------------------------------------------- */
+.index-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: var(--calce);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  animation: sheet-in 0.28s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .index-sheet {
+    animation: none;
+  }
+}
+
+.index-sheet__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 62px;
+  padding-block: 10px;
+  border-bottom: 1px solid var(--line-mid);
+}
+
+.index-list {
+  border-top: 1px solid var(--line);
+}
+
+.index-list a {
+  display: grid;
+  grid-template-columns: 3.4rem 1fr;
+  align-items: baseline;
+  gap: 16px;
+  padding: clamp(14px, 2.4vw, 26px) 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  transition: color 0.16s ease;
+}
+
+@media (min-width: 860px) {
+  .index-list a {
+    grid-template-columns: 4.5rem minmax(0, 1fr) minmax(0, 32ch);
+    align-items: center;
+  }
+}
+
+.index-list a:hover,
+.index-list a:focus-visible,
+.index-list a.on {
+  color: var(--vino);
+}
+
+.index-list .index-title {
+  font-family: var(--display);
+  font-size: clamp(28px, 5vw, 54px);
+  line-height: 1;
+}
+
+.index-list .index-note {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+}
+
+@media (max-width: 859px) {
+  .index-list .index-note {
+    grid-column: 2;
+    margin-top: 6px;
+  }
+}
+
+/* --- fascia dati --------------------------------------------------------- */
+.datastrip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--line-mid);
+  border-bottom: 1px solid var(--line-mid);
+}
+
+@media (min-width: 720px) {
+  .datastrip {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.datastrip > div {
+  padding: 18px 20px 18px 0;
+  border-left: 1px solid var(--line);
+  padding-left: 20px;
+  min-width: 0;
+}
+
+.datastrip > div:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+
+@media (max-width: 719px) {
+  .datastrip > div:nth-child(odd) {
+    border-left: none;
+    padding-left: 0;
+  }
+  .datastrip > div:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+}
+
+.datastrip dt {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+.datastrip dd {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(26px, 3.4vw, 42px);
+  line-height: 1;
+}
+
+/* --- schede / elenchi ---------------------------------------------------- */
+.spec {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border-top: 1px solid var(--line-mid);
+}
+
+.spec > div {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  gap: 10px 20px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: baseline;
+}
+
+@media (max-width: 560px) {
+  .spec > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3px;
+  }
+}
+
+.spec dt {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.spec dd {
+  margin: 0;
+  font-size: 15.5px;
+  color: var(--ink);
+  min-width: 0;
+}
+
+/* scala a tacche 0–5 — un dato, non un gadget */
+.scale {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.scale i {
+  width: 26px;
+  height: 8px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+}
+
+.scale i.on {
+  background: var(--vino);
+  border-color: var(--vino);
+}
+
+@media (max-width: 420px) {
+  .scale i {
+    width: 18px;
+  }
+}
+
+/* --- elenco etichette ---------------------------------------------------- */
+.labels {
+  border-top: 1px solid var(--line-mid);
+}
+
+.label-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  padding: clamp(18px, 2.4vw, 26px) 16px;
+  margin-inline: -16px;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  position: relative;
+  transition:
+    background-color 0.22s ease,
+    color 0.22s ease;
+}
+
+@media (min-width: 900px) {
+  .label-row {
+    grid-template-columns: 3.4rem minmax(0, 1.05fr) minmax(0, 1.2fr) 2.5rem;
+    gap: 28px;
+    align-items: center;
+  }
+}
+
+/* Passare sopra un'etichetta la riempie del colore di quel vino: il
+   campionario si accende una riga alla volta. */
+.label-row:hover,
+.label-row:focus-visible {
+  background: var(--vino);
+  color: var(--on-vino);
+}
+
+.label-row:hover .mono,
+.label-row:hover .num,
+.label-row:hover .prose,
+.label-row:hover time,
+.label-row:focus-visible .mono,
+.label-row:focus-visible .num,
+.label-row:focus-visible .prose {
+  color: color-mix(in srgb, var(--on-vino) 78%, transparent);
+}
+
+.label-row__swatch {
+  width: 100%;
+  height: 8px;
+  background: var(--vino);
+  transition: background-color 0.22s ease;
+}
+
+.label-row:hover .label-row__swatch {
+  background: var(--on-vino);
+}
+
+@media (min-width: 900px) {
+  .label-row__swatch {
+    width: 46px;
+    height: 46px;
+  }
+}
+
+.label-row__name {
+  font-family: var(--display);
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1;
+}
+
+.label-row__arrow {
+  font-family: var(--mono);
+  font-size: 18px;
+  text-align: right;
+  color: var(--ink-faint);
+  transition: transform 0.18s ease;
+}
+
+.label-row:hover .label-row__arrow {
+  transform: translateX(4px);
+  color: var(--vino);
+}
+
+/* --- testata della scheda vino ------------------------------------------- */
+.wine-head {
+  background: var(--vino);
+  color: var(--on-vino);
+  padding-block: clamp(40px, 7vw, 92px);
+}
+
+.wine-head .eyebrow,
+.wine-head .num {
+  color: color-mix(in srgb, var(--on-vino) 72%, transparent);
+}
+
+.wine-head .display {
+  color: var(--on-vino);
+}
+
+.wine-head .display em {
+  color: inherit;
+}
+
+.wine-head .rule {
+  background: color-mix(in srgb, var(--on-vino) 35%, transparent);
+}
+
+/* --- mappa parcelle ------------------------------------------------------ */
+.atlas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+@media (min-width: 1000px) {
+  .atlas {
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: 48px;
+  }
+}
+
+.atlas__map {
+  width: 100%;
+  border: 1px solid var(--line-mid);
+  background: var(--calce-alta);
+  min-width: 0;
+}
+
+.parcel {
+  fill: transparent;
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  cursor: pointer;
+  transition:
+    fill 0.2s ease,
+    stroke 0.2s ease;
+}
+
+.parcel:hover,
+.parcel.on {
+  fill: color-mix(in srgb, var(--vino) 22%, transparent);
+  stroke: var(--vino);
+  stroke-width: 1.6;
+}
+
+.parcel-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  fill: var(--ink-soft);
+  pointer-events: none;
+  text-anchor: middle;
+  text-transform: uppercase;
+}
+
+.contour {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.sea-line {
+  fill: none;
+  stroke: var(--line-mid);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+}
+
+.atlas__panel {
+  border-top: 1px solid var(--line-strong);
+  padding-top: 20px;
+  min-width: 0;
+}
+
+/* --- profilo del suolo --------------------------------------------------- */
+.soil {
+  width: 100%;
+  border: 1px solid var(--line-mid);
+  background: var(--calce-alta);
+}
+
+.soil-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  fill: var(--ink-soft);
+}
+
+.soil-depth {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  fill: var(--ink-faint);
+}
+
+/* --- ruota dell'anno ----------------------------------------------------- */
+.wheel {
+  width: 100%;
+  max-width: 460px;
+  margin-inline: auto;
+}
+
+.wheel-month {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  fill: var(--ink-faint);
+  text-anchor: middle;
+  text-transform: uppercase;
+}
+
+.wheel-arc {
+  fill: none;
+  stroke-width: 13;
+  stroke-linecap: butt;
+  opacity: 0.85;
+}
+
+.wheel-arc.now {
+  opacity: 1;
+}
+
+/* --- form ---------------------------------------------------------------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px 28px;
+}
+
+@media (min-width: 760px) {
+  .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.field--full {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-width: 0;
+  font-family: var(--sans);
+  font-size: 15.5px;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line-strong);
+  border-radius: 0;
+  padding: 9px 2px;
+  resize: vertical;
+  transition: border-color 0.18s ease;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-bottom-color: var(--vino);
+}
+
+.field select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%),
+    linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+  background-position:
+    calc(100% - 12px) calc(50% + 1px),
+    calc(100% - 7px) calc(50% + 1px);
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 26px;
+}
+
+.field .err {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--vino);
+}
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  cursor: pointer;
+  min-width: 0;
+}
+
+.check input {
+  appearance: none;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  cursor: pointer;
+}
+
+.check input:checked {
+  background: var(--vino);
+  border-color: var(--vino);
+  box-shadow: inset 0 0 0 3px var(--calce);
+}
+
+.notice {
+  border: 1px solid var(--vino);
+  padding: 16px 18px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  color: var(--vino);
+}
+
+/* --- piede --------------------------------------------------------------- */
+.site-foot {
+  background: var(--ink);
+  color: var(--calce);
+  margin-top: clamp(60px, 8vw, 110px);
+  position: relative;
+  z-index: 1;
+}
+
+.site-foot a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.site-foot .eyebrow {
+  color: rgba(233, 228, 216, 0.55);
+}
+
+.foot-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px;
+  padding-block: clamp(44px, 6vw, 76px);
+}
+
+@media (min-width: 780px) {
+  .foot-grid {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: 48px;
+  }
+}
+
+@media (min-width: 1140px) {
+  .foot-grid {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.8fr) minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+}
+
+.foot-grid > section {
+  min-width: 0;
+}
+
+.foot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: 16px;
+  font-size: 14.5px;
+  color: rgba(233, 228, 216, 0.82);
+}
+
+.foot-list a:hover {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.foot-bottom {
+  border-top: 1px solid rgba(233, 228, 216, 0.18);
+  padding-block: 20px 26px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 26px;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.05em;
+  color: rgba(233, 228, 216, 0.5);
+}
+
+.site-foot .field label {
+  color: rgba(233, 228, 216, 0.55);
+}
+
+.site-foot .field input {
+  color: var(--calce);
+  border-bottom-color: rgba(233, 228, 216, 0.4);
+}
+
+.site-foot .field input::placeholder {
+  color: rgba(233, 228, 216, 0.35);
+}
+
+.site-foot .check {
+  color: rgba(233, 228, 216, 0.7);
+}
+
+.site-foot .check input {
+  border-color: rgba(233, 228, 216, 0.4);
+}
+
+.site-foot .check input:checked {
+  box-shadow: inset 0 0 0 3px var(--ink);
+}
+
+.site-foot .btn {
+  border-color: rgba(233, 228, 216, 0.5);
+  color: var(--calce);
+}
+
+.site-foot .btn:hover {
+  background: var(--calce);
+  border-color: var(--calce);
+  color: var(--ink);
+}
+
+.site-foot .notice {
+  border-color: rgba(233, 228, 216, 0.5);
+  color: var(--calce);
+}
+
+/* --- comparsa allo scroll ------------------------------------------------ */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.reveal.shown {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --- utilità ------------------------------------------------------------- */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 56px);
+}
+
+@media (min-width: 920px) {
+  .cols--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cols--aside {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  }
+  .cols--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 620px) and (max-width: 919px) {
+  .cols--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.card {
+  border-top: 1px solid var(--line-strong);
+  padding-top: 18px;
+  min-width: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,0 +1,158 @@
+@let it = i18n.locale() === 'it';
+@let w = wine();
+
+@if (w) {
+  <header class="wine-head">
+    <div class="wrap">
+      <p class="num">{{ w.code }} · {{ i18n.pick(w.appellation) }}</p>
+      <h1 class="display" style="margin: 18px 0 24px">{{ w.name }}</h1>
+      <hr class="rule" />
+      <p class="lede" style="margin-top: 24px; max-width: 30ch">{{ i18n.pick(w.tagline) }}</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="cols cols--aside">
+        <div>
+          <p class="eyebrow eyebrow--vino">{{ i18n.t('tasting') }}</p>
+          <p class="prose" style="margin-top: 18px; font-size: 17.5px">{{ i18n.pick(w.tasting) }}</p>
+
+          <div class="cols cols--2" style="margin-top: 40px; gap: 32px">
+            <div>
+              <p class="eyebrow">{{ i18n.t('pairings') }}</p>
+              <ul class="foot-list" style="color: var(--ink-soft); margin-top: 14px">
+                @for (pair of i18n.pick(w.pairings); track pair) {
+                  <li>— {{ pair }}</li>
+                }
+              </ul>
+            </div>
+            <div>
+              <p class="eyebrow">{{ i18n.t('service') }}</p>
+              <p style="margin-top: 14px; color: var(--ink-soft)">{{ i18n.pick(w.serve) }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="eyebrow">{{ i18n.t('profile') }}</p>
+          <dl class="spec" style="margin-top: 14px">
+            @for (trait of w.profile; track trait.label.it) {
+              <div>
+                <dt>{{ i18n.pick(trait.label) }}</dt>
+                <dd>
+                  <span class="scale" role="img" [attr.aria-label]="trait.value + '/5'">
+                    @for (step of steps; track step) {
+                      <i [class.on]="step <= trait.value"></i>
+                    }
+                  </span>
+                </dd>
+              </div>
+            }
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight" appReveal>
+    <div class="wrap">
+      <p class="eyebrow">{{ i18n.t('technicalSheet') }}</p>
+      <dl class="spec" style="margin-top: 16px">
+        <div>
+          <dt>{{ i18n.t('denomination') }}</dt>
+          <dd>{{ i18n.pick(w.appellation) }}</dd>
+        </div>
+        <div>
+          <dt>{{ i18n.t('vintage') }}</dt>
+          <dd>{{ w.vintage }}</dd>
+        </div>
+        <div>
+          <dt>{{ i18n.t('grape') }}</dt>
+          <dd>{{ i18n.pick(w.grape) }}</dd>
+        </div>
+        <div>
+          <dt>{{ i18n.t('parcels') }}</dt>
+          <dd>{{ w.parcels.join(' · ') }}</dd>
+        </div>
+        <div>
+          <dt>{{ i18n.t('soil') }}</dt>
+          <dd>{{ i18n.pick(w.soil) }}</dd>
+        </div>
+        <div>
+          <dt>{{ i18n.t('vinification') }}</dt>
+          <dd>{{ i18n.pick(w.vinification) }}</dd>
+        </div>
+        <div>
+          <dt>{{ i18n.t('ageing') }}</dt>
+          <dd>{{ i18n.pick(w.ageing) }}</dd>
+        </div>
+        <div>
+          <dt>{{ i18n.t('alcohol') }}</dt>
+          <dd>{{ w.alcohol }}</dd>
+        </div>
+        <div>
+          <dt>{{ i18n.t('bottles') }}</dt>
+          <dd>{{ w.bottles }}</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" appReveal>
+    <div class="wrap">
+      <div class="section__head">
+        <p class="num">§</p>
+        <h2 class="display--sm">{{ it ? 'Da dove viene' : 'Where it comes from' }}</h2>
+        <p class="mono" style="color: var(--ink-faint)">
+          {{ it ? 'Le parcelle che finiscono in questa bottiglia.' : 'The parcels in this bottle.' }}
+        </p>
+      </div>
+
+      <div class="cols cols--2">
+        @for (parcel of parcels(); track parcel.name) {
+          <article class="card">
+            <h3 class="display--sm" style="font-size: clamp(24px, 3vw, 34px)">{{ parcel.name }}</h3>
+            <p class="mono" style="color: var(--ink-faint); margin-top: 8px">
+              {{ parcel.hectares }} · {{ parcel.altitude }} ·
+              {{ i18n.pick(parcel.exposure) }} · {{ parcel.planted }}
+            </p>
+            <p class="prose" style="margin-top: 16px; font-size: 15.5px">
+              {{ i18n.pick(parcel.note) }}
+            </p>
+          </article>
+        }
+      </div>
+
+      <p style="margin-top: 32px">
+        <a class="btn btn--ghost" [routerLink]="i18n.link('terroir')">
+          {{ it ? 'Tutto il territorio' : 'The whole terroir' }}
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section--tight">
+    <div class="wrap">
+      <hr class="rule" />
+      <div class="row" style="justify-content: space-between; padding-top: 26px">
+        <a class="btn btn--ghost" [routerLink]="i18n.link('wine', siblings().previous.slug)">
+          ← {{ siblings().previous.name }}
+        </a>
+        <a class="btn btn--ghost" [routerLink]="i18n.link('wines')">{{ i18n.t('backToWines') }}</a>
+        <a class="btn btn--ghost" [routerLink]="i18n.link('wine', siblings().next.slug)">
+          {{ siblings().next.name }} →
+        </a>
+      </div>
+    </div>
+  </section>
+} @else {
+  <section class="section">
+    <div class="wrap">
+      <h1 class="display--sm">{{ it ? 'Etichetta non trovata' : 'Label not found' }}</h1>
+      <p style="margin-top: 20px">
+        <a class="btn btn--solid" [routerLink]="i18n.link('wines')">{{ i18n.t('allWines') }}</a>
+      </p>
+    </div>
+  </section>
+}

@@ -1,0 +1,143 @@
+@let it = i18n.locale() === 'it';
+
+<section class="section section--tight">
+  <div class="wrap">
+    <p class="eyebrow">§ 05 — {{ it ? 'Visite' : 'Visits' }}</p>
+    <h1 class="display" style="margin-top: 20px; max-width: 14ch">
+      @if (it) {
+        Aperto <em>su appuntamento</em>, tutto l’anno.
+      } @else {
+        Open <em>by appointment</em>, all year.
+      }
+    </h1>
+    <p class="prose" style="margin-top: 28px">
+      {{
+        it
+          ? 'Non abbiamo una sala degustazione con le luci soffuse: c’è la cantina, con dentro il cemento e le botti, e un tavolo grande. Chi viene entra mentre si lavora — che è il motivo per cui a settembre riceviamo solo chi vuole vendemmiare.'
+          : 'There is no dimly lit tasting room here: there is the cellar, with the concrete tanks and the casks in it, and one big table. Visitors come in while we work — which is why in September we only take people who want to pick.'
+      }}
+    </p>
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="cols cols--3">
+      @for (visit of visits; track visit.id) {
+        <article class="card">
+          <p class="eyebrow eyebrow--vino">{{ visit.price }} · {{ i18n.pick(visit.duration) }}</p>
+          <h2 class="display--sm" style="margin: 12px 0 8px; font-size: clamp(24px, 3vw, 34px)">
+            {{ i18n.pick(visit.name) }}
+          </h2>
+          <p class="mono" style="color: var(--ink-faint)">{{ i18n.pick(visit.people) }}</p>
+
+          <ul class="foot-list" style="color: var(--ink-soft); margin-top: 18px">
+            @for (line of i18n.pick(visit.includes); track line) {
+              <li>— {{ line }}</li>
+            }
+          </ul>
+
+          <p class="prose" style="margin-top: 18px; font-size: 15.5px">{{ i18n.pick(visit.note) }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section--tight" appReveal>
+  <div class="wrap">
+    <dl class="spec">
+      @for (row of opening; track row.days.it) {
+        <div>
+          <dt>{{ i18n.pick(row.days) }}</dt>
+          <dd>{{ i18n.pick(row.hours) }}</dd>
+        </div>
+      }
+    </dl>
+  </div>
+</section>
+
+<section class="section" appReveal>
+  <div class="wrap">
+    <div class="section__head">
+      <p class="num">§ 05.1</p>
+      <h2 class="display--sm">{{ it ? 'Prenota' : 'Book a visit' }}</h2>
+      <p class="mono" style="color: var(--ink-faint)">
+        {{
+          it
+            ? 'Rispondiamo entro due giorni lavorativi.'
+            : 'We reply within two working days.'
+        }}
+      </p>
+    </div>
+
+    @if (sent()) {
+      <p class="notice">
+        {{
+          it
+            ? 'Richiesta registrata. Ti scriviamo per confermare data e orario.'
+            : 'Request logged. We will write to confirm the date and time.'
+        }}
+      </p>
+    } @else {
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="form-grid">
+        <div class="field">
+          <label for="v-name">{{ it ? 'Nome e cognome' : 'Full name' }}</label>
+          <input id="v-name" formControlName="name" autocomplete="name" />
+          @if (form.controls.name.touched && form.controls.name.invalid) {
+            <span class="err">{{ i18n.t('required') }}</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="v-email">Email</label>
+          <input id="v-email" type="email" formControlName="email" autocomplete="email" />
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <span class="err">{{ i18n.t('invalidEmail') }}</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="v-visit">{{ it ? 'Formula' : 'Format' }}</label>
+          <select id="v-visit" formControlName="visit">
+            @for (visit of visits; track visit.id) {
+              <option [value]="visit.id">{{ i18n.pick(visit.name) }} — {{ visit.price }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="v-date">{{ it ? 'Data desiderata' : 'Preferred date' }}</label>
+          <input id="v-date" type="date" formControlName="date" />
+          @if (form.controls.date.touched && form.controls.date.invalid) {
+            <span class="err">{{ i18n.t('required') }}</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="v-people">{{ it ? 'Persone' : 'People' }}</label>
+          <input id="v-people" type="number" min="1" max="12" formControlName="people" />
+        </div>
+
+        <div class="field">
+          <label for="v-lang">{{ it ? 'Lingua della visita' : 'Language of the visit' }}</label>
+          <select id="v-lang" formControlName="language">
+            <option value="it">{{ it ? 'Italiano' : 'Italian' }}</option>
+            <option value="en">{{ it ? 'Inglese' : 'English' }}</option>
+          </select>
+        </div>
+
+        <div class="field field--full">
+          <label for="v-notes">{{ it ? 'Note' : 'Notes' }}</label>
+          <textarea id="v-notes" rows="4" formControlName="notes"></textarea>
+        </div>
+
+        <div class="field--full">
+          <button class="btn btn--solid" type="submit">
+            {{ it ? 'Invia richiesta' : 'Send request' }}
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</section>
