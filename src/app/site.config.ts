@@ -8,4 +8,4 @@
  * og:url, non l'indirizzo che hai incollato. Cambiando dominio si cambia
  * questa riga e si rifà la build: sitemap e robots.txt si riallineano da soli.
  */
-export const SITE_URL = 'https://siderno-cantina.vercel.app';
+export const SITE_URL = 'https://sidero-cantina.vercel.app';
