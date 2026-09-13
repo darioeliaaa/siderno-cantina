@@ -6,7 +6,7 @@ import { SiteHeader } from './components/site-header/site-header';
 import { SiteFooter } from './components/site-footer/site-footer';
 import { LocaleService } from './i18n/locale.service';
 import { ESTATE, OPENING } from './data/estate';
-import { SITE_URL } from './seo/seo.service';
+import { SITE_URL } from './site.config';
 
 const WINERY_JSON_LD = {
   '@context': 'https://schema.org',

@@ -54,7 +54,11 @@ export class WinePage {
         param: wine.slug,
         title: {
           it: `${wine.name} — ${wine.appellation.it} ${wine.vintage} | Sìdero`,
-          en: `${wine.name} — ${wine.appellation.en} ${wine.vintage} | Sìdero`,
+          // In inglese la denominazione italiana per esteso non la cerca
+          // nessuno: meglio il vitigno e la regione, che sono le parole con
+          // cui un importatore arriva davvero qui. Serve anche a non avere
+          // due pagine con lo stesso identico title in lingue diverse.
+          en: `${wine.name} ${wine.vintage} — ${wine.variety} from Cirò, Calabria | Sìdero`,
         },
         description: {
           it: `${wine.tagline.it} ${wine.grape.it}, ${wine.alcohol}, ${wine.bottles} bottiglie. Scheda tecnica, degustazione e abbinamenti.`,

@@ -16,7 +16,7 @@
         </h1>
       </div>
 
-      <div class="stack">
+      <div class="stack" style="gap: 24px">
         <p class="prose">
           @if (it) {
             Cirò, costa ionica calabrese. Gaglioppo e Greco Bianco su sabbia e argilla ferrosa, a
@@ -28,6 +28,26 @@
             oak, nothing added beyond sulphites at bottling.
           }
         </p>
+
+        <dl class="cartouche">
+          <div>
+            <dt>{{ it ? 'Denominazione' : 'Appellation' }}</dt>
+            <dd>Cirò DOC</dd>
+          </div>
+          <div>
+            <dt>{{ it ? 'Annata in corso' : 'Current vintage' }}</dt>
+            <dd>2025</dd>
+          </div>
+          <div>
+            <dt>{{ it ? 'Vitigni' : 'Grapes' }}</dt>
+            <dd>Gaglioppo · Greco</dd>
+          </div>
+          <div>
+            <dt>{{ it ? 'Riserva 2025' : '2025 Riserva' }}</dt>
+            <dd>{{ it ? 'non prodotta' : 'not made' }}</dd>
+          </div>
+        </dl>
+
         <div class="row">
           <a class="btn btn--solid" [routerLink]="i18n.link('wines')">
             {{ it ? 'Le etichette' : 'The labels' }}
@@ -119,7 +139,7 @@
   </div>
 </section>
 
-<section class="section" appReveal>
+<section class="section band--dark" appReveal>
   <div class="wrap">
     <div class="section__head">
       <p class="num">§ 03</p>

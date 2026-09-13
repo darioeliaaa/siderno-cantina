@@ -33,6 +33,11 @@
       stroke-width="1.4"
     />
     <circle cx="200" cy="200" r="4" fill="var(--ink)" />
+
+    <text class="wheel-center--small" x="200" y="176">
+      {{ i18n.locale() === 'it' ? 'In questo momento' : 'Right now' }}
+    </text>
+    <text class="wheel-center" x="200" y="238">{{ i18n.pick(current.name) }}</text>
   </svg>
 
   <div>

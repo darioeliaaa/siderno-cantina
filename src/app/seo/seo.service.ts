@@ -3,9 +3,7 @@ import { Meta, Title } from '@angular/platform-browser';
 
 import { LocaleService } from '../i18n/locale.service';
 import { Bilingual, LOCALES, Locale, PageId, pathFor } from '../i18n/locale';
-
-/** Cambiando questo cambia ogni canonical, hreflang e og:url del sito. */
-export const SITE_URL = 'https://sidero-cantina.vercel.app';
+import { SITE_URL } from '../site.config';
 
 export interface PageSeo {
   page: PageId;

@@ -2,13 +2,14 @@ import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 
 /**
- * Genera sitemap.xml leggendo le pagine appena prerenderizzate.
+ * Genera sitemap.xml e robots.txt leggendo le pagine appena prerenderizzate.
  *
- * Scritta a mano, una sitemap su ventotto URL in due lingue diverge dal sito
+ * Scritta a mano, una sitemap su trenta URL in due lingue diverge dal sito
  * alla prima pagina aggiunta. Qui la fonte è la cartella di build: se una
  * pagina non è stata generata non finisce in sitemap, e se ne nasce una nuova
  * ci finisce da sola. Canonical e hreflang si rileggono dall'HTML, così sono
- * sempre gli stessi che vede il crawler.
+ * sempre gli stessi che vede il crawler — e anche il dominio dichiarato in
+ * robots.txt viene da lì, invece che da una terza copia scritta a mano.
  */
 const ROOT = new URL('..', import.meta.url).pathname;
 const BROWSER_DIR = join(ROOT, 'dist', 'sidero-cantina', 'browser');
@@ -60,4 +61,12 @@ ${page.alternates
 `;
 
 await writeFile(join(BROWSER_DIR, 'sitemap.xml'), xml, 'utf8');
-console.log(`sitemap.xml — ${pages.length} URL`);
+
+const origin = new URL(pages[0].canonical).origin;
+await writeFile(
+  join(BROWSER_DIR, 'robots.txt'),
+  `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`,
+  'utf8',
+);
+
+console.log(`sitemap.xml — ${pages.length} URL · robots.txt — ${origin}`);

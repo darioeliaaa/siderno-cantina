@@ -13,6 +13,8 @@ export interface Wine {
   name: string;
   appellation: Bilingual;
   grape: Bilingual;
+  /** Il solo nome del vitigno: serve dove "Gaglioppo 100%, viti del 1961" è troppo. */
+  variety: string;
   vintage: string;
   alcohol: string;
   bottles: string;
@@ -42,6 +44,7 @@ export const WINES: Wine[] = [
     name: 'Sìdero Rosso Classico',
     appellation: { it: 'Cirò Rosso Classico DOC', en: 'Cirò Rosso Classico DOC' },
     grape: { it: 'Gaglioppo 100%', en: '100% Gaglioppo' },
+    variety: 'Gaglioppo',
     vintage: '2022',
     alcohol: '13,5%',
     bottles: '18.400',
@@ -86,6 +89,7 @@ export const WINES: Wine[] = [
     name: 'Punta Alice',
     appellation: { it: 'Cirò Rosato DOC', en: 'Cirò Rosato DOC' },
     grape: { it: 'Gaglioppo 100%', en: '100% Gaglioppo' },
+    variety: 'Gaglioppo',
     vintage: '2024',
     alcohol: '12,5%',
     bottles: '6.100',
@@ -124,6 +128,7 @@ export const WINES: Wine[] = [
     name: 'Lipuda',
     appellation: { it: 'Cirò Bianco DOC', en: 'Cirò Bianco DOC' },
     grape: { it: 'Greco Bianco 100%', en: '100% Greco Bianco' },
+    variety: 'Greco Bianco',
     vintage: '2024',
     alcohol: '12,5%',
     bottles: '8.900',
@@ -165,6 +170,7 @@ export const WINES: Wine[] = [
       en: 'Cirò Rosso Classico Superiore Riserva DOC',
     },
     grape: { it: 'Gaglioppo 100%, viti del 1961', en: '100% Gaglioppo, vines planted 1961' },
+    variety: 'Gaglioppo',
     vintage: '2019',
     alcohol: '14%',
     bottles: '4.200',
